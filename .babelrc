@@ -1,0 +1,13 @@
+{
+  "presets": ["es2015"],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "armor-ask": "./dist/armor-ask"
+        }
+      }
+    ]
+  ]
+}
