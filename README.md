@@ -1,6 +1,8 @@
 # Armor Ask
 
-`armor-ask` is a library in JavaScript.
+`armor-ask` is a library in JavaScript. It implements a `ask-answer` mode to exchange data between different parts in your project.
+
+`ask-answer` is similar to `sub-pub`, but asking an question is synchronous, so you can immediately get result returned when you ask a question. You can also wait for an answer if it doesn't be provided yet.
 
 # Installation
 
@@ -86,3 +88,32 @@ foo.shut(); // close all the answers in default namespace.
 foo.shut("some question", { ns: "new" }); // close the answer to 'some question' in 'new' namespace.
 foo.shut(void 0, { all: true }); // close all the answers that were provided by foo.
 ```
+
+# Ask Helper
+
+Maybe sometimes you want to know if an question has been provided an answer, or how many answers have been provided, there are two methods belonging to `ask` api that can help you do it.
+
+## ask.has(question:string, [options:object])
+
+To find out if there is an answer for the question, return `true` if an answer is found, otherwise return `false`.
+
+- `options:object`
+  - `ns:string` The namespace to search for an answer, the default value is `default`.
+  - `all` If given true, to search all namespaces for an answer. 
+  
+```js
+foo.ask.has('who are you', {all: true});
+```
+
+## ask.list([options:object])
+
+Return an plain object that contains all questions that has been answered.
+
+- `options:object`
+  - `ns:string` The namespace to list all questions, the default value is `default`.
+  - `all` If given true, list all questions in all of namespaces.
+
+```js
+foo.ask.list({all: true});
+```
+
