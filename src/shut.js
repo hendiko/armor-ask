@@ -2,15 +2,16 @@
  * @Author: Xavier Yin 
  * @Date: 2018-08-02 14:00:50 
  * @Last Modified by: Xavier Yin
- * @Last Modified time: 2018-08-03 10:27:17
+ * @Last Modified time: 2018-08-09 11:37:43
  * 
  * 关闭问题答案
  */
 import { namespaces } from "./registry";
-import { isFunction } from "./utils";
+import { isFunction, safeNs } from "./utils";
 
 function removeQuestion({ question, ns, registry }) {
-  if (ns == void 0) ns = "default";
+  ns = safeNs(ns);
+  question = safeNs(question);
   let reply = registry[question];
   let { waiting, onShut, ctx } = reply || {};
   // 如果有等待回答的提问，则保留它们。
@@ -31,6 +32,7 @@ function removeQuestion({ question, ns, registry }) {
 
 export default function shut(answerer, question, options) {
   let { ns, all } = options || {};
+  ns = safeNs(ns);
   let answers = answerer._armorAskAnswers;
   if (!answers || !answers.length) return answerer;
 
@@ -40,7 +42,7 @@ export default function shut(answerer, question, options) {
     answer = answers[i];
     if (
       (question == void 0 || question === answer.question) &&
-      (all || ns == void 0 ? answer.ns == void 0 : answer.ns === ns)
+      (all || answer.ns === ns)
     ) {
       removeQuestion(answer);
     } else {

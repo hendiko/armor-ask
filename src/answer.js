@@ -2,15 +2,16 @@
  * @Author: Xavier Yin 
  * @Date: 2018-08-02 14:01:01 
  * @Last Modified by: Xavier Yin
- * @Last Modified time: 2018-08-03 09:57:53
+ * @Last Modified time: 2018-08-09 11:54:06
  * 
  * Answer
  * 
  * Provide the resolution to a topic.
  */
 import shutApi from "./shut";
-import { getRegistry } from "./registry";
+import { getRegistry, namespaces } from "./registry";
 import { SOLUTION } from "./consts";
+import { safeNs, safeQuestion } from "./utils";
 
 /**
  *
@@ -27,7 +28,8 @@ import { SOLUTION } from "./consts";
 export default function answer(answerer, question, solution, options) {
   let { update, ns, ctx, once, onShut } = options || {};
   if (!ctx) ctx = answerer;
-  if (question == void 0) question = "";
+  question = safeQuestion(question);
+  ns = safeNs(ns);
 
   let registry = getRegistry(ns, true);
   let reply = registry[question];
@@ -38,6 +40,7 @@ export default function answer(answerer, question, solution, options) {
     // 如果要求更新已存在的 solution
     if (update) {
       shutApi(reply.answerer, question, { ns });
+      namespaces[ns] = registry;
     } else {
       // 返回注册解决方案失败
       return false;

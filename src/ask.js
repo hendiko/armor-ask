@@ -2,13 +2,13 @@
  * @Author: Xavier Yin 
  * @Date: 2018-08-02 11:14:55 
  * @Last Modified by: Xavier Yin
- * @Last Modified time: 2018-08-03 15:51:07
+ * @Last Modified time: 2018-08-09 11:32:31
  * 
  * 提问
  */
 
 import { getRegistry } from "./registry";
-import { isNumber, isFunction } from "./utils";
+import { isNumber, isFunction, safeNs, safeQuestion } from "./utils";
 import { SOLUTION } from "./consts";
 import shutApi from "./shut";
 
@@ -30,13 +30,13 @@ export default function ask(question, options) {
   let { evaluate = true, ns, wait, params } = options || {};
   wait *= 1;
   if (!isNumber(wait)) wait = 0;
-
+  ns = safeNs(ns);
   let registry = getRegistry(ns, wait);
 
   // 如果不要求 wait，当 registry 为否时可以直接返回。
   if (!registry) return;
 
-  if (question == void 0) question = "";
+  question = safeQuestion(question);
   let reply = registry[question];
 
   // 如果不要求 wait，当 reply 为否时可以直接返回。
