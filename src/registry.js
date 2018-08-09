@@ -2,7 +2,7 @@
  * @Author: Xavier Yin 
  * @Date: 2018-08-02 10:58:10 
  * @Last Modified by: Xavier Yin
- * @Last Modified time: 2018-08-03 10:05:20
+ * @Last Modified time: 2018-08-09 11:38:52
  * 
  * 问题注册表
  * 
@@ -16,6 +16,8 @@
  * namespaces[namespace] => registries[question] => reply[solution] 
  */
 
+import { safeNs } from "./utils";
+
 // 命名空间仓储
 export const namespaces = {
   default: {}
@@ -27,7 +29,7 @@ export const namespaces = {
  * @param {bool} create 是否强制创建新的命名空间。
  */
 export function getRegistry(ns, create) {
-  if (ns == null) ns = "default";
+  ns = safeNs(ns);
   let registry = namespaces[ns];
   if (!registry && create) {
     registry = namespaces[ns] = {};
